@@ -36,7 +36,7 @@ private:
     void createActions();
     void createMenus();
     void createFilters(QHBoxLayout *layout);
-    void initializeTable(QTableWidget *table);
+    void initializeTable();
     QRadioButton *rb_all;
     QRadioButton *rb_overdue;
     QRadioButton *rb_today;

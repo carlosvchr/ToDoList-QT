@@ -23,7 +23,7 @@ MainWindow::MainWindow()
 
     //Table
     table = new QTableWidget(this);
-    initializeTable(table);
+    initializeTable();
 
     QVBoxLayout *layout = new QVBoxLayout;
     layout -> setMargin(8);
@@ -95,9 +95,8 @@ void MainWindow::createMenus()
     fileMenu->addAction(exitProgramAct);
 }
 
-void MainWindow::initializeTable(QTableWidget *table)
+void MainWindow::initializeTable()
 {
-    table -> setRowCount(10);
     table -> setColumnCount(5);
     tableHeader << "Finished" << "DueDate" << "Title" << "% Complete" << "Description";
     table -> setHorizontalHeaderLabels(tableHeader);
@@ -137,6 +136,9 @@ void MainWindow::cellSelected(int nRow, int nCol)
 
 void MainWindow::updateTable(){
     vector<string*> data = IOManager::readFile(path);
+    table -> clearContents();
+    //table -> clear();
+    table -> setRowCount(data.size());
     unsigned int i;
     for(i=0; i<data.size(); i++){
         QCheckBox *qcb = new QCheckBox;
