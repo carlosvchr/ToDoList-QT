@@ -9,6 +9,9 @@
 #include <QTableWidget>
 #include <string>
 #include <vector>
+#include <ctime>
+#include <sstream>
+#include <iomanip>
 
 using namespace std;
 
@@ -23,13 +26,14 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow();
     ~MainWindow();
-    void updateTable();
+    void updateTable(vector<string*> data);
 
 private slots:
     void addTask();
     void changeDB();
     void exitProgram();
     void cellSelected(int nRow, int nCol);
+    void filter();
 
 private:
     Ui::MainWindow *ui;
@@ -37,6 +41,7 @@ private:
     void createMenus();
     void createFilters(QHBoxLayout *layout);
     void initializeTable();
+    int getWeekNumber(tm t);
     QRadioButton *rb_all;
     QRadioButton *rb_overdue;
     QRadioButton *rb_today;
