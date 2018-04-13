@@ -12,6 +12,7 @@
 #include <ctime>
 #include <sstream>
 #include <iomanip>
+#include <QFileDialog>
 
 using namespace std;
 
@@ -26,13 +27,14 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow();
     ~MainWindow();
-    void updateTable(vector<string*> data);
 
 private slots:
     void addTask();
     void changeDB();
     void exitProgram();
     void cellSelected(int nRow, int nCol);
+
+public slots:
     void filter();
 
 private:
@@ -42,6 +44,8 @@ private:
     void createFilters(QHBoxLayout *layout);
     void initializeTable();
     int getWeekNumber(tm t);
+    void updateTable(vector<string*> data);
+    string path;
     QRadioButton *rb_all;
     QRadioButton *rb_overdue;
     QRadioButton *rb_today;
@@ -53,7 +57,6 @@ private:
     QAction *addTaskAct;
     QAction *changeDBAct;
     QAction *exitProgramAct;
-    string path = "/home/carlos/Escritorio/database.txt";
 };
 
 #endif // MAINWINDOW_H

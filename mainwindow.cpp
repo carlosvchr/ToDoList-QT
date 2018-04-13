@@ -1,10 +1,13 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "iomanager.h"
+#include "newtaskdialog.h"
 #include <QHeaderView>
 
 MainWindow::MainWindow()
 {
+    path = "/home/carlos/Escritorio/database.txt";
+
     QWidget *widget = new QWidget;
     setCentralWidget(widget);
 
@@ -123,12 +126,26 @@ void MainWindow::initializeTable()
 
 void MainWindow::addTask()
 {
-
+    NewTaskDialog dlg;
+    dlg.setModal(true);
+    dlg.setPath(path);
+    dlg.setOrigin(this);
+    dlg.exec();
 }
 
 void MainWindow::changeDB()
 {
+    QFileDialog dlg(this);
+    dlg.setFileMode(QFileDialog::ExistingFile);
+    dlg.setNameFilter(tr("Text (*.txt)"));
+    dlg.setViewMode(QFileDialog::List);
 
+    QStringList fileNames;
+    if (dlg.exec()){
+        fileNames = dlg.selectedFiles();
+        this->path = ((QString)fileNames.at(0)).toUtf8().constData();
+        this->filter();
+    }
 }
 
 void MainWindow::exitProgram()
@@ -138,7 +155,12 @@ void MainWindow::exitProgram()
 
 void MainWindow::cellSelected(int nRow, int nCol)
 {
-    cout << "Row: " << nRow << "; Col: " << nCol << endl;
+    NewTaskDialog dlg;
+    dlg.setModal(true);
+    dlg.setData(table->item(nRow, 1)->text().toUtf8().constData(), table->item(nRow, 2)->text().toUtf8().constData(), table->item(nRow, 3)->text().toUtf8().constData(), table->item(nRow, 4)->text().toUtf8().constData());
+    dlg.setPath(path);
+    dlg.setOrigin(this);
+    dlg.exec();
 }
 
 void MainWindow::updateTable(vector<string*> data){
@@ -190,7 +212,7 @@ void MainWindow::filter()
         }
 
         if(rb_today->isChecked()){
-            if(cur.tm_year+1900 != year || cur.tm_mon+1 != month || cur.tm_mday != day){
+            if(cur.tm_year+1900 != year || cur.tm_mon+1 != month || cur.tm_mday+1 != day){
                 data.erase(data.begin()+i);
                 i--;
             }
@@ -204,12 +226,12 @@ void MainWindow::filter()
             auxdate =  gmtime(&auxd);
             tm cp = *auxdate;
 
-            if(getWeekNumber(cur) != getWeekNumber(cp)){
+            if(getWeekNumber(cur) != getWeekNumber(cp) || cur.tm_year != cp.tm_year){
                 data.erase(data.begin()+i);
                 i--;
             }
         }else if(rb_overdue->isChecked()){
-            if(cur.tm_year+1900 < year || (cur.tm_year+1900 == year && cur.tm_mon+1 < month) || (cur.tm_year+1900 == year && cur.tm_mon+1 == month && cur.tm_mday < day)){
+            if(cur.tm_year+1900 < year || (cur.tm_year+1900 == year && cur.tm_mon+1 < month) || (cur.tm_year+1900 == year && cur.tm_mon+1 == month && cur.tm_mday+1 <= day)){
                 data.erase(data.begin()+i);
                 i--;
             }
@@ -224,7 +246,7 @@ int MainWindow::getWeekNumber(tm t)
 {
     time_t nnow = time(0);
     tm *mauxdate = gmtime(&nnow);
-    mauxdate->tm_mday = 1;
+    mauxdate->tm_mday = 0;
     mauxdate->tm_mon = 0;
     mauxdate->tm_year = mauxdate->tm_year;
     nnow = mktime(mauxdate);

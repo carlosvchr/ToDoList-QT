@@ -9,7 +9,6 @@ IOManager::IOManager()
 vector<string*> IOManager::readFile(string path)
 {
     vector <string*> data;
-
     string str;
     ifstream infile;
     infile.open(path);
@@ -22,6 +21,13 @@ vector<string*> IOManager::readFile(string path)
     infile.close();
 
     return data;
+}
+
+void IOManager::writeFile(string path, string file)
+{
+    ofstream outfile(path);
+    outfile << file;
+    outfile.close();
 }
 
 
