@@ -39,7 +39,6 @@ public slots:
 
 private:
     Ui::MainWindow *ui;
-    void createActions();
     void createMenus();
     void createFilters(QHBoxLayout *layout);
     void initializeTable();

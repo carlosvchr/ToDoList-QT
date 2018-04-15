@@ -11,12 +11,7 @@ MainWindow::MainWindow()
     QWidget *widget = new QWidget;
     setCentralWidget(widget);
 
-    QWidget *topFiller = new QWidget;
-    topFiller -> setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    //topFiller->resize(topFiller->width(), 1);
-
     // MenuBar
-    createActions();
     createMenus();
 
     // Filters
@@ -30,7 +25,6 @@ MainWindow::MainWindow()
 
     QVBoxLayout *layout = new QVBoxLayout;
     layout -> setMargin(8);
-    layout -> addWidget(topFiller);
     layout -> addLayout(filtersLayout);
     layout -> addWidget(table);
     layout -> setStretch(0, 0);
@@ -44,20 +38,24 @@ MainWindow::MainWindow()
     resize(580, 480);
 }
 
-void MainWindow::createActions()
+void MainWindow::createMenus()
 {
     addTaskAct = new QAction(tr("&Add Task"), this);
     addTaskAct -> setShortcuts(QKeySequence::New);
-    addTaskAct -> setStatusTip(tr("Add new task to the list."));
     connect(addTaskAct, &QAction::triggered, this, &MainWindow::addTask);
 
     changeDBAct = new QAction(tr("&Change Database"), this);
-    changeDBAct -> setStatusTip(tr("Change the database."));
     connect(changeDBAct, &QAction::triggered, this, &MainWindow::changeDB);
 
     exitProgramAct = new QAction(tr("&Exit"), this);
     connect(exitProgramAct, &QAction::triggered, this, &MainWindow::exitProgram);
+
+    fileMenu = menuBar()->addMenu(tr("&File"));
+    fileMenu->addAction(addTaskAct);
+    fileMenu->addAction(changeDBAct);
+    fileMenu->addAction(exitProgramAct);
 }
+
 
 void MainWindow::createFilters(QHBoxLayout *layout)
 {
@@ -95,14 +93,6 @@ void MainWindow::createFilters(QHBoxLayout *layout)
     layout -> setStretch(2, 0);
     layout -> setStretch(3, 0);
     layout -> setStretch(4, 1);
-}
-
-void MainWindow::createMenus()
-{
-    fileMenu = menuBar()->addMenu(tr("&File"));
-    fileMenu->addAction(addTaskAct);
-    fileMenu->addAction(changeDBAct);
-    fileMenu->addAction(exitProgramAct);
 }
 
 void MainWindow::initializeTable()
