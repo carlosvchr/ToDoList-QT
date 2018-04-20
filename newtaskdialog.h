@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <string>
 #include <vector>
+#include <QMessageBox>
 #include "iomanager.h"
 #include "mainwindow.h"
 
@@ -29,13 +30,15 @@ public:
     ~NewTaskDialog();
 
 private slots:
-    void on_buttonBox_accepted();
-
-    void on_buttonBox_rejected();
-
     void on_slider_valueChanged(int value);
+    void on_description_ed_textChanged();
+    void on_title_et_textChanged(const QString &arg1);
+    void on_datepicker_userDateChanged(const QDate &date);
+    void on_savebtn_clicked();
+    void on_cancelbtn_clicked();
 
 private:
+    void checkFields();
     Ui::NewTaskDialog *ui;
     bool newTask;
     string path;
