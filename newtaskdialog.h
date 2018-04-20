@@ -37,6 +37,8 @@ private slots:
     void on_savebtn_clicked();
     void on_cancelbtn_clicked();
 
+    void on_deletebtn_clicked();
+
 private:
     void checkFields();
     Ui::NewTaskDialog *ui;

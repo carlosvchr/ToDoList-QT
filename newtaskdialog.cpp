@@ -16,6 +16,7 @@ NewTaskDialog::NewTaskDialog(QWidget *parent) :
     ui->slider->setSingleStep(5);
 
     ui->savebtn->setEnabled(false);
+    ui->deletebtn->setVisible(false);
 
     this->newTask = true;
 }
@@ -39,6 +40,7 @@ void NewTaskDialog::setData(string duedate, string title, string percent, string
     ui->description_ed->setPlainText(QString::fromStdString(description));
     this->newTask = false;
     ui->savebtn->setText("Modify");
+    ui->deletebtn->setVisible(true);
 }
 
 
@@ -118,5 +120,32 @@ void NewTaskDialog::on_savebtn_clicked()
 
 void NewTaskDialog::on_cancelbtn_clicked()
 {
+    this->close();
+}
+
+void NewTaskDialog::on_deletebtn_clicked()
+{
+    vector<string*> lines = IOManager::readFile(path);
+    unsigned int i;
+
+    QMessageBox::StandardButton reply;
+      reply = QMessageBox::question(this, "Delete task", "Are you sure you want to permanently delete this task?",
+                                    QMessageBox::Yes|QMessageBox::No);
+      if (reply == QMessageBox::No) {
+          return;
+      }
+
+    string s = "";
+
+    for(i=0; i<lines.size(); i++){
+        if(!(lines.at(i)[0].compare(oldDuedate) == 0 && lines.at(i)[1].compare(oldTitle) == 0 &&
+                lines.at(i)[2].compare(oldPercent) == 0 && lines.at(i)[3].compare(oldDescription) == 0)){
+            s+=lines.at(i)[0]+";"+lines.at(i)[1]+";"+lines.at(i)[2]+";"+lines.at(i)[3]+"\n";
+        }
+    }
+
+    IOManager::writeFile(path, s);
+    lines.clear();
+    origin->filter();
     this->close();
 }

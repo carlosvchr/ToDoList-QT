@@ -5,20 +5,38 @@ IOManager::IOManager()
 
 }
 
+bool IOManager::exists(string path){
+    ifstream infile;
+    infile.exceptions ( ifstream::failbit | ifstream::badbit );
+
+    try{
+        infile.open(path);
+        infile.close();
+        return true;
+    }catch (const ifstream::failure& e) {
+        return false;
+    }
+}
 
 vector<string*> IOManager::readFile(string path)
 {
     vector <string*> data;
     string str;
     ifstream infile;
-    infile.open(path);
-    while(!infile.eof()){
-        getline(infile, str);
-        if(str.length()>0){
-            data.push_back(IOManager::split(str, ';'));
+    infile.exceptions ( ifstream::failbit | ifstream::badbit );
+
+    try{
+        infile.open(path);
+        while(!infile.eof()){
+            getline(infile, str);
+            if(str.length()>0){
+                data.push_back(IOManager::split(str, ';'));
+            }
         }
+        infile.close();
+    }catch (const ifstream::failure& e) {
+        cout<<"Exception opening/reading file"<<endl;
     }
-    infile.close();
 
     return data;
 }

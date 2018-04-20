@@ -15,6 +15,7 @@ public:
     static vector<string*> readFile(string path);
     static void writeFile(string path, string);
     static string* split(string l, char regex);
+    static bool exists(string path);
 };
 
 

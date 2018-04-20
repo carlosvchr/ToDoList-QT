@@ -6,6 +6,7 @@
 
 MainWindow::MainWindow()
 {
+    // This is the default path, but if it does not matter, you can change it in the program
     path = "/home/carlos/Escritorio/database.txt";
 
     QWidget *widget = new QWidget;
@@ -41,6 +42,9 @@ MainWindow::MainWindow()
 void MainWindow::createMenus()
 {
     addTaskAct = new QAction(tr("&Add Task"), this);
+    if(IOManager::exists(path) == false){
+        addTaskAct->setEnabled(false);
+    }
     addTaskAct -> setShortcuts(QKeySequence::New);
     connect(addTaskAct, &QAction::triggered, this, &MainWindow::addTask);
 
@@ -136,6 +140,8 @@ void MainWindow::changeDB()
         this->path = ((QString)fileNames.at(0)).toUtf8().constData();
         this->filter();
     }
+
+    addTaskAct->setEnabled(true);
 }
 
 void MainWindow::exitProgram()
