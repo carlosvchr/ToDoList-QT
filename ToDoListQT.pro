@@ -27,12 +27,15 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     iomanager.cpp \
-    newtaskdialog.cpp
+    newtaskdialog.cpp \
+    createdatafiledialog.cpp
 
 HEADERS += \
         mainwindow.h \
     iomanager.h \
-    newtaskdialog.h
+    newtaskdialog.h \
+    createdatafiledialog.h
 
 FORMS += \
-    newtaskdialog.ui
+    newtaskdialog.ui \
+    createdatafiledialog.ui

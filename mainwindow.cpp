@@ -2,11 +2,12 @@
 #include "ui_mainwindow.h"
 #include "iomanager.h"
 #include "newtaskdialog.h"
+#include "createdatafiledialog.h"
 #include <QHeaderView>
 
 MainWindow::MainWindow()
 {
-    // This is the default path, but if it does not matter, you can change it in the program
+    // This is the default path, but if it does not exist, you can change it into the program
     path = "/home/carlos/Escritorio/database.txt";
 
     QWidget *widget = new QWidget;
@@ -48,7 +49,10 @@ void MainWindow::createMenus()
     addTaskAct -> setShortcuts(QKeySequence::New);
     connect(addTaskAct, &QAction::triggered, this, &MainWindow::addTask);
 
-    changeDBAct = new QAction(tr("&Change Database"), this);
+    newDatafileAct = new QAction(tr("&Create New Data File"), this);
+    connect(newDatafileAct, &QAction::triggered, this, &MainWindow::newDatafile);
+
+    changeDBAct = new QAction(tr("&Change Data File"), this);
     connect(changeDBAct, &QAction::triggered, this, &MainWindow::changeDB);
 
     exitProgramAct = new QAction(tr("&Exit"), this);
@@ -56,6 +60,7 @@ void MainWindow::createMenus()
 
     fileMenu = menuBar()->addMenu(tr("&File"));
     fileMenu->addAction(addTaskAct);
+    fileMenu->addAction(newDatafileAct);
     fileMenu->addAction(changeDBAct);
     fileMenu->addAction(exitProgramAct);
 }
@@ -123,6 +128,14 @@ void MainWindow::addTask()
     NewTaskDialog dlg;
     dlg.setModal(true);
     dlg.setPath(path);
+    dlg.setOrigin(this);
+    dlg.exec();
+}
+
+void MainWindow::newDatafile()
+{
+    CreateDatafileDialog dlg;
+    dlg.setModal(true);
     dlg.setOrigin(this);
     dlg.exec();
 }
@@ -208,7 +221,7 @@ void MainWindow::filter()
         }
 
         if(rb_today->isChecked()){
-            if(cur.tm_year+1900 != year || cur.tm_mon+1 != month || cur.tm_mday+1 != day){
+            if(cur.tm_year+1900 != year || cur.tm_mon+1 != month || cur.tm_mday != day){
                 data.erase(data.begin()+i);
                 i--;
             }
@@ -227,7 +240,7 @@ void MainWindow::filter()
                 i--;
             }
         }else if(rb_overdue->isChecked()){
-            if(cur.tm_year+1900 < year || (cur.tm_year+1900 == year && cur.tm_mon+1 < month) || (cur.tm_year+1900 == year && cur.tm_mon+1 == month && cur.tm_mday+1 <= day)){
+            if(cur.tm_year+1900 < year || (cur.tm_year+1900 == year && cur.tm_mon+1 < month) || (cur.tm_year+1900 == year && cur.tm_mon+1 == month && cur.tm_mday <= day)){
                 data.erase(data.begin()+i);
                 i--;
             }

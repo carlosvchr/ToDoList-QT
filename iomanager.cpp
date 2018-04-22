@@ -35,7 +35,7 @@ vector<string*> IOManager::readFile(string path)
         }
         infile.close();
     }catch (const ifstream::failure& e) {
-        cout<<"Exception opening/reading file"<<endl;
+
     }
 
     return data;
@@ -46,6 +46,11 @@ void IOManager::writeFile(string path, string file)
     ofstream outfile(path);
     outfile << file;
     outfile.close();
+}
+
+
+void IOManager::createFile(string path){
+    ofstream{path};
 }
 
 

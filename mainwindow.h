@@ -26,12 +26,14 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow();
+    inline void setPath(string path){ this->path = path; }
     ~MainWindow();
 
 private slots:
     void addTask();
     void changeDB();
     void exitProgram();
+    void newDatafile();
     void cellSelected(int nRow, int nCol);
 
 public slots:
@@ -53,6 +55,7 @@ private:
     QTableWidget *table;
     QStringList tableHeader;
     QMenu *fileMenu;
+    QAction *newDatafileAct;
     QAction *addTaskAct;
     QAction *changeDBAct;
     QAction *exitProgramAct;
