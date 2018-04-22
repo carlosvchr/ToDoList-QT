@@ -59,6 +59,7 @@ void CreateDatafileDialog::on_createbtn_clicked()
     string stitle(ui->name_ed->text().toUtf8().constData());
     origin->setPath(sfolder + QString(QDir::separator()).toUtf8().constData() + stitle + ".txt");
     origin->filter();
+    this->close();
 }
 
 void CreateDatafileDialog::on_examinebtn_clicked()
